@@ -1,27 +1,24 @@
 import { type NextPage } from "next";
-import Head from "next/head";
 
-import Hero from "~/components/Hero";
 import Filter from "~/components/Filter";
-// import Navbar from "~/components/navbar";
+import Card from "~/components/Card";
+import CoreTemplate from "~/components/coreTemplate";
+
+import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
 
+  const pokemon = api.pokemon.getAll.useQuery();
+
   return (
-    <>
-      <Head>
-        <title>Pokedex</title>
-        <meta name="description" content="Pokedex app" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <main>
-        {/*<Navbar />*/}
-        <Hero />
-        <div className="container mx-auto">
-          <Filter />
-        </div>
-      </main>
-    </>
+    <CoreTemplate title="Pokedex">
+      <Filter />
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {pokemon.data?.map((pokemon) => (
+          <Card key={pokemon.id} pokemon={pokemon} />
+        ))}
+      </div>
+    </CoreTemplate>
   );
 };
 
